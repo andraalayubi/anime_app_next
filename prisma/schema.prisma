@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// datasource db {
+//   provider = "mysql"
+//   url = env("DATABASE_URL")
+// }
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Collection {
+  id            Int @id @default(autoincrement())
+  anime_mal_id  String
+  user_email    String
+  anime_image   String?
+  anime_title   String?
+  
+  @@unique([user_email, anime_mal_id])
+}
+
+model Comment {
+  id            Int @id @default(autoincrement())
+  anime_mal_id  String
+  user_email    String
+  comment       String
+  username      String
+  anime_title   String
+  user_image    String
+  like          Int @default(0)
+  dislike       Int @default(0)
+}
+
+model User {
+  id            Int @id @default(autoincrement())
+  anime_mal_id  String
+  isLike        Boolean
+}
